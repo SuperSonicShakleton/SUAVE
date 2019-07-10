@@ -2,27 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6c05f20a-6720-481d-85ad-cdd17e883436" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/SUAVE.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Carpet Plot/ContourPlotTrail2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Carpet Plot/ContourPlotTrial3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Carpet Plot/ContourPlotTrial4.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Carpet Plot/ContourplotTrial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Carpet Plot/ScatterPlot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/JAXA/Drag Estimation of Concorde - Bhargava 050719.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/Cubic_Spline_Blender.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/compressibility_drag_total.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/induced_drag_aircraft.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/miscellaneous_drag_aircraft.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/parasite_drag_fuselage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/parasite_drag_propulsor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/parasite_drag_wing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/wave_drag_lift.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/wave_drag_volume.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/parasite_drag_propulsor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trunk/SUAVE/Methods/Aerodynamics/Supersonic_Zero/Drag/wave_drag_volume.py" beforeDir="false" afterPath="$PROJECT_DIR$/trunk/SUAVE/Methods/Aerodynamics/Supersonic_Zero/Drag/wave_drag_volume.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/induced_drag_aircraft.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/induced_drag_aircraft.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,8 +24,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/induced_drag_aircraft.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="95" column="81" selection-start-line="95" selection-start-column="81" selection-end-line="95" selection-end-column="81" />
+            <state relative-caret-position="300">
+              <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="93" />
               <folding>
                 <element signature="e#294#321#0" expanded="true" />
               </folding>
@@ -180,8 +160,8 @@
         <option value="$PROJECT_DIR$/trunk/SUAVE/Methods/Aerodynamics/Supersonic_Zero/Drag/wave_drag_volume.py" />
         <option value="$PROJECT_DIR$/Bhargava/JAXA/Drag Estimation of Concorde - Bhargava 050719.py" />
         <option value="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/wave_drag_lift.py" />
-        <option value="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/induced_drag_aircraft.py" />
         <option value="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/parasite_drag_propulsor.py" />
+        <option value="$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/induced_drag_aircraft.py" />
       </list>
     </option>
   </component>
@@ -905,8 +885,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Bhargava/Supersonic Zero/Drag/induced_drag_aircraft.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="95" column="81" selection-start-line="95" selection-start-column="81" selection-end-line="95" selection-end-column="81" />
+        <state relative-caret-position="300">
+          <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="93" />
           <folding>
             <element signature="e#294#321#0" expanded="true" />
           </folding>

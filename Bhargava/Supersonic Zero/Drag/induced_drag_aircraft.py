@@ -108,3 +108,5 @@ def induced_drag_aircraft(state,settings,geometry):
         print("Drag Polar Mode")          # No need to change this ?
     
     return total_induced_drag
+
+    # I want to check if this change appears online
