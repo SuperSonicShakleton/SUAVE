@@ -2,7 +2,7 @@
 # wave_drag_lift.py
 # 
 # Created:  Feb 2019, T. MacDonald
-# Modified: 
+# Modified: July 2019 B. Narayana
 
 # ----------------------------------------------------------------------
 #  Imports
@@ -30,8 +30,16 @@ def wave_drag_lift(conditions,configuration,wing):
     Inputs:
     conditions.freestream.mach_number        [Unitless]
     conditions.aerodynamics.lift_coefficient [Unitless]
-    wing.total_length                        [m]                           # Couldn't find this in wing.py
+    wing.total_length                        [m]
     wing.areas.reference                     [m^2]
+
+
+
+    wing_area                                                   [m2]
+    length of wing                                              [m]
+    semispan                                                    [m]
+
+
 
     Outputs:
     wave_drag_lift                           [Unitless]
@@ -42,12 +50,14 @@ def wave_drag_lift(conditions,configuration,wing):
 
     # Unpack
     freestream   = conditions.freestream
-    total_length = wing.total_length                       # couldn't find this in wing.py
-    Sref         = wing.areas.reference
-    Sw = geometry.wings['main_wing'].areas.exposed         # is this equal to area of the wing ?
-    sigma_w = geometry.wings['main_wing'].areas.box_ratio  # couldn't find this in wing.py
+    total_length = wing.total_length
+    Sref = geometry.reference_area                         # this is expected to be reference area for the entire vehicle
+    Sw = geometry.wings['main_wing'].areas.reference       # this is expected to the area of the wing
+    sigma_w = geometry.wings['main_wing'].areas.box_ratio  # couldn't find this in wing.py or concorde - you may have to define it there
     # sigma_w = 0.6193                                     # box ratio for Concorde wing per JAXA
-    beta = (1/0.577264)                                    # Setting value for Beta - how we get this value is not defined
+    beta = (1/0.577264)                                    # Setting value for Beta - how we get this value is not defined in JAXA
+    s = geometry.wings['main_wing'].spans.projected        # this is expected to be semi-span although i couldn't find semi-span defined in concorde.py
+    ar = geometry.wings['main_wing'].aspect_ratio
 
     # Conditions
     Mc  = freestream.mach_number * 1.0
@@ -68,8 +78,10 @@ def wave_drag_lift(conditions,configuration,wing):
 
     # Computations
 
+    p = (2 * s) / (ar * l)                                              # Planform Parameter
 
-    def fw(x):                                                                  # defining function fw
+    # defining function fw
+    def fw(x):
         if x <= 0.178:
             fwx = 0.0
         else:
@@ -80,9 +92,10 @@ def wave_drag_lift(conditions,configuration,wing):
     Kw = (1 + 1 / p) * fw(sigma_w) / (2 * (sigma_w ** 2))
 
     CDwl = (Sref / Sw) * (((beta ** 2) * p * s * Kw) / (math.pi * l)) * (
-                CL ** 2)  # calculating wave drag due to lift - assume CL to be a specific value
-
+                CL ** 2)                                                 # calculating wave drag due to lift - assume CL to be a specific value
+    wave_drag_lift = CDwl
     """
+    Commented this part of the original code out - uncomment as needed 
     
     x = np.pi*ARL/4
     beta = np.array([[0.0]] * len(Mc))

@@ -2,6 +2,7 @@
 # induced_drag_aircraft.py
 # 
 # Created:  Feb 2019, T. MacDonald
+#  Modified: July 2019 B. Narayana
 #         
      
 # ----------------------------------------------------------------------
@@ -37,13 +38,11 @@ def induced_drag_aircraft(state,settings,geometry):
     geometry.wings['main_wing'].aspect_ratio                     [Unitless]
 
 
-    lift_coefficient            [Unitless]
-    # planform_parameter          [Unitless]
-    # slenderness_ratio           [Unitless]
-    reference_area              [m2]
-    wing_area                   [m2]
-    length of wing            [m]
-    semispan                  [m]
+    lift_coefficient                                            [Unitless]
+    reference_area                                              [m2]
+    wing_area                                                   [m2]
+    length of wing                                              [m]
+    semispan                                                    [m]
 
     Outputs:
     total_induced_drag                                           [Unitless]
@@ -59,12 +58,15 @@ def induced_drag_aircraft(state,settings,geometry):
     aircraft_lift = conditions.aerodynamics.lift_coefficient
     mach          = conditions.freestream.mach_number
     ar = geometry.wings['main_wing'].aspect_ratio
-    Sref = geometry.reference_area              # reference area for the entire vehicle
-    Sw = geometry.wings['main_wing'].areas.reference     # is this equal to area of the wing ?
-    l = geometry.wings['main_wing'].total_length             # not found in wing.py
-    s = geometry.wings['main_wing'].spans.projected             # not found in wing.py
-"""
+    Sref = geometry.reference_area                                     # reference area for the entire vehicle
+    Sw = geometry.wings['main_wing'].areas.reference                   # this is expected to the area of the wing
+    l = geometry.wings['main_wing'].total_length                       # not found in wing.py
+    s = geometry.wings['main_wing'].spans.projected                    # this is expected to be semi-span although i couldn't find semi-span defined in concorde.py
+
     e             = configuration.oswald_efficiency_factor
+    """
+    Commented this part of the original code out - uncomment as needed 
+    
     K             = configuration.viscous_lift_dependent_drag_factor
     wing_e        = geometry.wings['main_wing'].span_efficiency
     ar            = geometry.wings['main_wing'].aspect_ratio 
@@ -74,8 +76,8 @@ def induced_drag_aircraft(state,settings,geometry):
         e = 1/((1/wing_e)+np.pi*ar*K*CDp)    
 """
 
-    # slenderness_ratio = s/l                                                             # Slenderness Ratio
-    p = (2*s)/(ar*l)                                                                    # Planform Parameter
+    # slenderness_ratio = s/l                                             # Slenderness Ratio
+    p = (2*s)/(ar*l)                                                      # Planform Parameter
 
     spline = Cubic_Spline_Blender(.91,.99)
     h00 = lambda M:spline.compute(M)      
@@ -87,8 +89,7 @@ def induced_drag_aircraft(state,settings,geometry):
     Kv = (1 / 2) * (1 + 1 / p)
 
     CDv = (Sref / Sw) * (p * Kv / (np.pi * 2 * (s / l))) * (
-                CL ** 2)  # calculating vortex drag due to lift - assume CL to be a specific value
-
+                CL ** 2)                                                               # calculating vortex drag due to lift - assume CL to be a specific value
     total_induced_drag = CDv
 
 
@@ -100,14 +101,12 @@ def induced_drag_aircraft(state,settings,geometry):
     try:
         conditions.aerodynamics.drag_breakdown.induced = Data(
             total             = total_induced_drag ,
-            efficiency_factor = e                  ,                # does this affect anything else?
+            efficiency_factor = e                  ,
             aspect_ratio      = ar                 ,
 
         )
     except:
-        print("Drag Polar Mode")          # No need to change this ?
+        print("Drag Polar Mode")
     
     return total_induced_drag
 
-    # I want to check if this change appears online 
-    # This is test as well to see if editing online works 
