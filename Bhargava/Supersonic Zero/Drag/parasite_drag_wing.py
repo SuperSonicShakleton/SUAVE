@@ -4,7 +4,7 @@
 # Created:  Dec 2013, SUAVE Team
 # Modified: Jan 2016, E. Botero      
 #           Apr 2019, T. MacDonald
-#           July 2019 B. Narayana
+#           July 2019, B. Narayana
 
 # ----------------------------------------------------------------------
 #  Imports
@@ -34,6 +34,7 @@ def parasite_drag_wing(state,settings,geometry):
 
     Source:
     http://aerodesign.stanford.edu/aircraftdesign/aircraftdesign.html (Stanford AA241 A/B Course Notes)
+    JAXA equations
 
     Inputs:
     settings.wing_parasite_drag_form_factor      [Unitless]
@@ -164,7 +165,33 @@ def parasite_drag_wing(state,settings,geometry):
         wing.areas.wetted = Swet                           
 
         # compute parasite drag coef., form factor, skin friction coef., compressibility factor and reynolds number for wing
-        wing_parasite_drag , k_w, cf_w_u, cf_w_l, k_comp_u, k_comp_l, k_reyn_u, k_reyn_l = compute_parasite_drag(re,mac_w,Mc,Tc,xtu,xtl,sweep_w,t_c_w,Sref,Swet,C)             
+        wing_parasite_drag , k_w, cf_w_u, cf_w_l, k_comp_u, k_comp_l, k_reyn_u, k_reyn_l = compute_parasite_drag(re,mac_w,Mc,Tc,xtu,xtl,sweep_w,t_c_w,Sref,Swet,C)
+
+# the code before this line can be easily omitted .. JAXA equations are used below
+
+    M = Mc                                               # reusing variable for JAXA
+    Sw_wet = Swet                                        # reusing variable for JAXA
+    Sw = Sref                                               # reusing variable for JAXA
+    s =  semispan                                           # reusing variable for JAXA
+    mu = geometry.wings['main_wing'].taper                  # This is expected to be 0 for main wing and tail wing
+    MAC = (2 / 3) * (Sw / s) * (1 + mu + mu * mu) / ((1 + mu) ** 2)   # Mean Aerodynamic Chord
+
+
+    Re_MAC = MAC*re                                          # reusing variable for JAXA
+
+
+        def CDf(ReL, M):                               # friction drag for each component
+            Cfi = 0.455 * (np.log10(ReL) ** (-2.58))  # Prandtl's formula
+            fM = (1 + 0.15 * M * M) ** (-0.58)  # Hoerner's formula
+            CDf = Cfi * fM
+            return CDf
+
+    CDf_w = CDf(Re_MAC, M) * (Sw_wet / Sref)             # friction drag for wing
+    # CDf_v = CDf(Re_MACv, M) * (Sv_wet / Sref)            # friction drag for tail, commented it out because it amounts to tiny fraction. Not sure if it needs to be added to a separate file or to this file
+
+    wing_parasite_drag = CDf_w
+
+
 
     # dump data to conditions
     wing_result = Data(
@@ -250,3 +277,4 @@ def compute_parasite_drag(re,mac_w,Mc,Tc,xtu,xtl,sweep_w,t_c_w,Sref,Swet,C):
 
 
     return wing_parasite_drag , k_w, cf_w_u, cf_w_l, k_comp_u, k_comp_l, k_reyn_u, k_reyn_l
+

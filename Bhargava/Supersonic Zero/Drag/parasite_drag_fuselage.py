@@ -28,6 +28,7 @@ def parasite_drag_fuselage(state,settings,geometry):
 
     Source:
     http://aerodesign.stanford.edu/aircraftdesign/aircraftdesign.html (Stanford AA241 A/B Course Notes)
+    JAXA equations
 
     Inputs:
     state.conditions.freestream.
@@ -58,7 +59,9 @@ def parasite_drag_fuselage(state,settings,geometry):
     freestream  = state.conditions.freestream
     Sref        = fuselage.areas.front_projected
     Swet        = fuselage.areas.wetted
-    
+
+    SB_wet      = Swet                    # reusing variable for JAXA
+
     l_fus  = fuselage.lengths.total
     d_fus  = fuselage.effective_diameter
     
@@ -67,9 +70,13 @@ def parasite_drag_fuselage(state,settings,geometry):
     Tc  = freestream.temperature    
     re  = freestream.reynolds_number
 
+    M = Mc                               # reusing variable for JAXA
+
     # reynolds number
     Re_fus = re*(l_fus)
-    
+
+    Re_lB  = Re_fus                      # reusing variable for JAXA
+
     # skin friction coefficient
     cf_fus, k_comp, k_reyn = compressible_turbulent_flat_plate(Re_fus,Mc,Tc)
     
@@ -85,6 +92,10 @@ def parasite_drag_fuselage(state,settings,geometry):
     du_max_u_high = np.array([[0.0]] * len(Mc))    
     
     k_fus = np.array([[0.0]] * len(Mc))
+
+
+    """ 
+    Commented this part of the original code out - uncomment as needed 
     
     low_inds  = Mc < high_cutoff
     high_inds = Mc > low_cutoff
@@ -102,10 +113,25 @@ def parasite_drag_fuselage(state,settings,geometry):
     
     du_max_u = du_max_u_low*(h00(Mc)) + du_max_u_high*(1-h00(Mc))    
     
-    k_fus = (1 + form_factor*du_max_u)**2
+    """
 
-    fuselage_parasite_drag = k_fus * cf_fus * Swet / Sref  
-    
+    k_fus = (1 + form_factor*du_max_u)**2                 # had to keep this out because it was dumped to conditions
+
+    """
+    fuselage_parasite_drag = k_fus * cf_fus * Swet / Sref
+
+    """
+
+    def CDf(ReL, M):  # friction drag for each component
+        Cfi = 0.455 * (np.log10(ReL) ** (-2.58))                     # Prandtl's formula
+        fM = (1 + 0.15 * M * M) ** (-0.58)                           # Hoerner's formula
+        CDf = Cfi * fM
+        return CDf
+
+    CDf_B = CDf(Re_lB, M) * (SB_wet / Sref)                          # friction drag for fuselage
+    fuselage_parasite_drag = CDf_B
+
+
     # dump data to conditions
     fuselage_result = Data(
         wetted_area               = Swet   , 
@@ -116,9 +142,16 @@ def parasite_drag_fuselage(state,settings,geometry):
         reynolds_factor           = k_reyn , 
         form_factor               = k_fus  ,
     )
+
+
     try:
         state.conditions.aerodynamics.drag_breakdown.parasite[fuselage.tag] = fuselage_result
     except:
         print("Drag Polar Mode fuse parasite")
+
+
+
+
+
     
     return fuselage_parasite_drag
