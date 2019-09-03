@@ -2,7 +2,7 @@
 # parasite_drag_propulsor.py
 #
 # Created:  Feb 2019, T. MacDonald
-# Modified:
+# Modified: Aug 2019, B. Narayana
 
 # ----------------------------------------------------------------------
 #  Imports
@@ -83,9 +83,9 @@ def parasite_drag_propulsor(state,settings,geometry):
     k_prop_sup = 1.
 
     trans_spline = Cubic_Spline_Blender(low_mach_cutoff,high_mach_cutoff)
-    h00 = lambda M:trans_spline.compute(M)
+    h00          = lambda M:trans_spline.compute(M)
 
-    k_prop = k_prop_sub*(h00(Mc)) + k_prop_sup*(1-h00(Mc))
+    k_prop       = k_prop_sub*(h00(Mc)) + k_prop_sup*(1-h00(Mc))
 
     # --------------------------------------------------------
     # find the final result

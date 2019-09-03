@@ -49,15 +49,15 @@ def wave_drag_lift(conditions,configuration,wing):
     """  
 
     # Unpack
-    freestream   = conditions.freestream
-    total_length = wing.total_length
-    Sref = geometry.reference_area                         # this is expected to be reference area for the entire vehicle
-    Sw = geometry.wings['main_wing'].areas.reference       # this is expected to the area of the wing
-    sigma_w = geometry.wings['main_wing'].areas.box_ratio  # couldn't find this in wing.py or concorde - you may have to define it there
-    # sigma_w = 0.6193                                     # box ratio for Concorde wing per JAXA
-    beta = (1/0.577264)                                    # Setting value for Beta - how we get this value is not defined in JAXA
-    s = geometry.wings['main_wing'].spans.projected        # this is expected to be semi-span although i couldn't find semi-span defined in concorde.py
-    ar = geometry.wings['main_wing'].aspect_ratio
+    freestream      = conditions.freestream
+    total_length    = wing.total_length
+    Sref            = geometry.reference_area
+    Sw              = geometry.wings['main_wing'].areas.reference
+    sigma_w         = geometry.wings['main_wing'].areas.box_ratio
+    # sigma_w       = 0.6193
+    beta            = (1/0.577264)
+    s               = geometry.wings['main_wing'].spans.projected
+    ar              = geometry.wings['main_wing'].aspect_ratio
 
     # Conditions
     Mc  = freestream.mach_number * 1.0
@@ -74,11 +74,9 @@ def wave_drag_lift(conditions,configuration,wing):
     mach_ind = Mc >= 1.01
 
 
-
-
     # Computations
 
-    p = (2 * s) / (ar * l)                                              # Planform Parameter
+    p = (2 * s) / (ar * l)
 
     # defining function fw
     def fw(x):
@@ -92,18 +90,9 @@ def wave_drag_lift(conditions,configuration,wing):
     Kw = (1 + 1 / p) * fw(sigma_w) / (2 * (sigma_w ** 2))
 
     CDwl = (Sref / Sw) * (((beta ** 2) * p * s * Kw) / (math.pi * l)) * (
-                CL ** 2)                                                 # calculating wave drag due to lift - assume CL to be a specific value
+                CL ** 2)
     wave_drag_lift = CDwl
-    """
-    Commented this part of the original code out - uncomment as needed 
-    
-    x = np.pi*ARL/4
-    beta = np.array([[0.0]] * len(Mc))
-    beta[Mc >= 1.01] = np.sqrt(Mc[Mc >= 1.01]**2-1)
-    wave_drag_lift = np.array([[0.0]] * len(Mc))
-    wave_drag_lift[Mc >= 1.01] = CL[Mc >= 1.01]**2*x/4*(np.sqrt(1+(beta[Mc >= 1.01]/x)**2)-1)
-    wave_drag_lift[0:len(Mc[Mc >= 1.01]),0] = wave_drag_lift[Mc >= 1.01]
-    """
+
     # Dump data to conditions
     wave_lift_result = Data(
         reference_area             = Sref   , 
